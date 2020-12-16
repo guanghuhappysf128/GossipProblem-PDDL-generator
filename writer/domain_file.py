@@ -87,6 +87,7 @@ def print_domain_file(base, file):
     file.write('\t\t:parameters (?i ?j)\n')
     file.write('\t\t:effect (and\n')
     file.write('\t\t' + ' '.join(str(atom)
-                                 for atom in base.get_atoms_of_depth(0)) + '\n')    
+                                 for atom in base.get_atoms_of_depth(0)) + '\t\t)\n')
+    file.write('\t)\n')
     file.write(')\n')
 
