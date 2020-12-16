@@ -23,7 +23,7 @@ def print_problem_file(base, file):
     file.write('(define (problem gossip)\n')
     file.write('\t(:domain gossip)\n\n')
 
-    file.write('\t(:objects ' + ' '.join(str(i) for i in agts()) + ')\n\n')
+    file.write('\t(:objects ' + ' '.join(str(i) for i in agts()) + ' ' +' '.join('s'+str(i) for i in agts())+ ')\n\n')
 
     file.write('\t(:init\n')
     file.write('\t\t' + ' '.join(str(atom) for atom in base.get_atoms_of_depth(0)) + '\n')
