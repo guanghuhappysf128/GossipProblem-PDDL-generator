@@ -21,8 +21,8 @@ def str_cond_effect(atom):
     e_diff = ''
 
     if len(atom.vis_list) > 0:
-        b_diff = '(and (not (?i = ' + str(atom.vis_list[0]) + ')) ' + \
-                 '(not (?j = ' + str(atom.vis_list[0]) + ')) '
+        b_diff = '(and (not (= ?i ' + str(atom.vis_list[0]) + ')) ' + \
+                 '(not (= ?j ' + str(atom.vis_list[0]) + ')) '
         e_diff = ')'
 
     pre = b_diff + \
