@@ -82,5 +82,11 @@ def print_domain_file(base, file):
     file.write(str_cond_effects_call(base) + '\t\t)\n')
     file.write('\t)\n')
 
+    # create dummy action for FS planner
+    file.write('\n\t(:action dummy\n')
+    file.write('\t\t:parameters (?i ?j)\n')
+    file.write('\t\t:effect (and\n')
+    file.write('\t\t' + ' '.join(str(atom)
+                                 for atom in base.get_atoms_of_depth(0)) + '\n')    
     file.write(')\n')
 
