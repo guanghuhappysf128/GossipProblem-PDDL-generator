@@ -10,7 +10,10 @@ from neggoalsparser.semantic_analysis import update_negative_goals
 from atomsbase.goal import Goal
 from writer.domain_file import print_domain_file
 from writer.problem_file import print_problem_file
+import os
+import datetime
 
+start_time = datetime.datetime.now()
 # depth and number of agents
 d = 1
 na = 6
@@ -47,14 +50,27 @@ except ParameterError as e:
 
 # write files
 print('Writing files...')
+if not os.path.exists("output"): os.mkdir("output")
+print(f"output/na{na}d{d}/")
+if not os.path.exists(f"output/na{na}d{d}/"): os.mkdir(f"output/na{na}d{d}/")
+domain_file = open(f"output/na{na}d{d}/domain.pddl", 'w')
+problem_file = open(f"output/na{na}d{d}/problem.pddl", 'w')
 
-domain_file = open('domain.pddl', 'w')
-problem_file = open('problem.pddl', 'w')
+
+# domain_file = open('domain.pddl', 'w')
+# problem_file = open('problem.pddl', 'w')
 
 print_domain_file(base, domain_file)
 print_problem_file(base, problem_file)
 
+
+
+
 domain_file.close()
 problem_file.close()
-
+running_file = open(f"output/na{na}d{d}/running.txt", 'w')
+total_time = datetime.datetime.now() - start_time
+print(f"total running time: {total_time}")
+running_file.write(f"total running time: {total_time}")
+running_file.close()
 print('Done.')
