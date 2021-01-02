@@ -1,7 +1,7 @@
 """ Writes the domain file.
 """
 
-from utils import depth, nb_agts, generate_all_sequences_up_to
+from utils import depth, nb_agts, generate_all_sequences_up_to, agts
 from atomsbase.atom import Atom
 
 """ Generates the visibility predicate for the given depth, of the form
@@ -60,34 +60,45 @@ def str_cond_effects_call(base):
 """ Generates the domain file (requirements, predicates and actions).
 """
 def print_domain_file(base, file):
-    file.write(';; Gossip problem - PDDL domain file\n')
-    file.write(';; depth ' + str(depth()) + ', ' +
-               str(nb_agts()) + ' agents\n\n')
 
-    file.write('(define (domain gossip)\n')
-    file.write('\t(:requirements\n')
-    file.write('\t\t:strips :disjunctive-preconditions :equality\n')
-    file.write('\t)\n\n')
+    output = ""
+    output += ';; Gossip problem - PDDL domain file\n'
+    output += ';; depth ' + str(depth()) + ', ' + str(nb_agts()) + ' agents\n\n'
 
-    file.write('\t(:predicates\n')
-    file.write('\t\t' + ' '.join(str(atom)
-                                 for atom in base.get_atoms_of_depth(0)) + '\n')
-    file.write('\t\t' + ' '.join(visibility_predicate(d)
-                                 for d in range(1, depth()+1)) + '\n')
-    file.write('\t)\n')
+    output += '(define (domain gossip)\n'
+    output += '\t(:requirements\n'
+    output += '\t\t:strips :disjunctive-preconditions :equality\n'
+    output += '\t)\n\n'
 
-    file.write('\n\t(:action call\n')
-    file.write('\t\t:parameters (?i ?j)\n')
-    file.write('\t\t:effect (and\n')
-    file.write(str_cond_effects_call(base) + '\t\t)\n')
-    file.write('\t)\n')
+    output += '\t(:predicates\n'
+    output += '\t\t' + ' '.join(str(atom)
+                                 for atom in base.get_atoms_of_depth(0)) + '\n'
+    output += '\t\t' + ' '.join(visibility_predicate(d)
+                                 for d in range(1, depth()+1)) + '\n'
+    output += '\t)\n'
+
+    output += '\n\t(:action call\n'
+    output += '\t\t:parameters (?i ?j)\n'
+    output += '\t\t:effect (and\n'
+    output += str_cond_effects_call(base) + '\t\t)\n'
+    output += '\t)\n'
 
     # create dummy action for FS planner
-    file.write('\n\t(:action dummy\n')
-    file.write('\t\t:parameters (?i ?j)\n')
-    file.write('\t\t:effect (and\n')
-    file.write('\t\t' + ' '.join(str(atom)
-                                 for atom in base.get_atoms_of_depth(0)) + '\t\t)\n')
-    file.write('\t)\n')
-    file.write(')\n')
+    output += '\n\t(:action dummy\n'
+    output += '\t\t:parameters (?i ?j)\n'
+    output += '\t\t:effect (and\n'
+    output += '\t\t' + ' '.join(str(atom)
+                                 for atom in base.get_atoms_of_depth(0)) + '\t\t)\n'
+    output += '\t)\n'
+    output += ')\n'
+
+    for i in agts():
+        output = output.replace(f"(s{i})",f"(ps{i})")
+    agt_str="abcdefgh"
+    for i in agts():
+        output = output.replace(f" {i} ",f" {agt_str[i-1]} ")
+        output = output.replace(f" {i})",f" {agt_str[i-1]})")
+
+
+    file.write(output)
 

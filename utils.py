@@ -45,7 +45,6 @@ def generate_all_atoms_up_to(depth):
 
             if not atom.is_instrospective():
                 res.append(atom)
-
     return res
 
 
